@@ -1,0 +1,29 @@
+name: Email Report
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # This will run the action every day at 6 a.m.
+
+jobs:
+  email:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Send email
+      uses: peter-evans/sendgrid-action@v2
+      with:
+        server: smtp.sendgrid.net
+        username: apikey
+        password: ${{ secrets.SENDGRID_API_KEY }}
+        from: <your-email>
+        to: <your-email>
+        subject: Daily Report
+        body: |
+          Here is your daily report:
+
+          ```
+          $(cat report.txt)
+          ```
